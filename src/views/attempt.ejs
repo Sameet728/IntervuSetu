@@ -1,0 +1,179 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-slate-900 mb-2">AI Voice Interview</h1>
+      <p class="text-slate-600">Practice your responses with real-time voice recognition and feedback</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+      <div class="p-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+          <!-- Main Content -->
+          <div class="flex-1">
+            <!-- Question Section -->
+            <div class="bg-gradient-to-r from-primary-50 to-blue-50 rounded-xl p-6 mb-6 border border-primary-100">
+              <div id="qNumber" class="text-sm font-semibold text-primary-600 mb-2">Question 1 of 10</div>
+              <div id="qText" class="text-xl font-bold text-slate-900 leading-relaxed">Loading question...</div>
+            </div>
+
+            <!-- Transcript Section -->
+            <div class="bg-slate-50 rounded-xl p-6 mb-6 border border-slate-200">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-slate-900 flex items-center">
+                  <svg class="w-5 h-5 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  Interview Transcript
+                </h3>
+                <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full">Live</span>
+              </div>
+              <div id="transcriptBox" class="space-y-3 max-h-48 overflow-y-auto text-slate-700 leading-relaxed">
+                <!-- Transcript will appear here -->
+              </div>
+            </div>
+
+            <!-- Live Answer Section -->
+            <div class="bg-slate-50 rounded-xl p-6 mb-6 border border-slate-200">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-slate-900 flex items-center">
+                  <svg class="w-5 h-5 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                  </svg>
+                  Your Live Answer
+                </h3>
+                <div id="recordingStatus" class="flex items-center text-xs text-slate-500">
+                  <span class="w-2 h-2 bg-slate-400 rounded-full mr-2"></span>
+                  Not recording
+                </div>
+              </div>
+              <div id="answerText" class="min-h-20 p-4 bg-white rounded-lg border-2 border-dashed border-slate-300 text-slate-500 italic">
+                Speak to see your answer transcribed here...
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="space-y-4">
+              <!-- Main Action Buttons -->
+              <div class="flex flex-wrap gap-3">
+                <button id="startListen" class="flex items-center px-6 py-3 bg-gradient-to-r from-primary-500 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                  </svg>
+                  Start Answering
+                </button>
+                <button id="stopListen" class="flex items-center px-6 py-3 bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-300 hover:bg-slate-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path>
+                  </svg>
+                  Stop
+                </button>
+                <button id="reAnswer" class="flex items-center px-6 py-3 bg-amber-50 text-amber-700 font-semibold rounded-xl border border-amber-200 hover:bg-amber-100 transition-all duration-200">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  </svg>
+                  Clear Answer
+                </button>
+                <button id="askDoubt" class="flex items-center px-6 py-3 bg-white text-slate-700 font-semibold rounded-xl border border-slate-300 hover:bg-slate-50 transition-all duration-200">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  Ask Doubt
+                </button>
+              </div>
+
+              <!-- Doubt Box -->
+              <div id="doubtBox" class="bg-blue-50 border border-blue-200 rounded-xl p-4 hidden">
+                <div class="flex items-start space-x-3">
+                  <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div class="text-blue-800 text-sm">
+                    <strong>AI Assistant:</strong> <span id="doubtResponse">How can I help you with this question?</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Navigation -->
+              <div class="flex justify-between items-center pt-6 border-t border-slate-200">
+                <div class="flex space-x-3">
+                  <button id="prevBtn" class="flex items-center px-6 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-300 hover:bg-slate-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Previous
+                  </button>
+                  <button id="nextBtn" class="flex items-center px-6 py-2.5 bg-gradient-to-r from-primary-500 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                    Next
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </button>
+                </div>
+                <button id="finishBtn" class="flex items-center px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hidden">
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  Finish & Get Feedback
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Camera Sidebar -->
+          <div class="lg:w-80">
+            <div class="bg-slate-900 rounded-2xl overflow-hidden border border-slate-700">
+              <div id="camBox" class="w-full h-48 bg-slate-800 flex items-center justify-center text-slate-400 relative">
+                <div class="text-center">
+                  <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                  </svg>
+                  <p class="text-sm">Camera preview</p>
+                </div>
+                <div class="absolute top-3 right-3 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            
+            <div class="mt-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <div class="flex items-start space-x-3">
+                <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="text-blue-800 text-sm">
+                  <strong>Pro Tip:</strong> Ensure good lighting and speak clearly for best voice recognition results. Maintain eye contact with the camera.
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <h4 class="font-semibold text-slate-900 mb-2 flex items-center">
+                <svg class="w-4 h-4 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Interview Progress
+              </h4>
+              <div class="w-full bg-slate-200 rounded-full h-2">
+                <div id="progressBar" class="bg-gradient-to-r from-primary-500 to-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-between text-xs text-slate-500 mt-2">
+                <span>Question <span id="currentQ">1</span> of <span id="totalQ">10</span></span>
+                <span><span id="progressPercent">0</span>%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const interviewId = "<%= interviewId %>";
+const questions = <%- JSON.stringify(questions) %>;
+let answers = <%- JSON.stringify(answers || []) %>;
+const initialTranscript = <%- JSON.stringify(initialTranscript || []) %>;
+const currentIndex = <%= currentIndex %>;
+const silenceTimeout = <%= silenceTimeout %>;
+</script>
+<script src="/js/attempt-voice-ai.js"></script>

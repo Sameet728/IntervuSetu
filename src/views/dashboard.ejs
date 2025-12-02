@@ -1,0 +1,135 @@
+<h2 class="text-3xl font-bold text-slate-900 mb-8">Your Interview Sessions</h2>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+  <% interviews.forEach(i => { %>
+    <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden group hover:-translate-y-1">
+      <!-- Header with gradient accent -->
+      <div class="bg-gradient-to-r from-primary-50 to-blue-50 px-6 py-4 border-b border-slate-100">
+        <div class="flex items-center justify-between">
+          <div class="text-sm font-medium text-primary-600">
+            <%= new Date(i.createdAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) %>
+          </div>
+          <div class="text-xs text-slate-500">
+            <%= new Date(i.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6">
+        <!-- Role and Difficulty -->
+        <div class="mb-4">
+          <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-primary-600 transition-colors duration-200">
+            <%= i.role %>
+          </h3>
+          <div class="flex items-center space-x-2">
+            <span class="text-slate-500 text-sm">Difficulty:</span>
+            <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium capitalize">
+              <%= i.difficulty %>
+            </span>
+          </div>
+        </div>
+
+        <!-- Status and Actions -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+          <!-- Status Badge -->
+          <div>
+            <% if (i.status === 'generated') { %>
+              <span class="inline-flex items-center px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-sm font-medium border border-amber-200">
+                <span class="w-2 h-2 bg-amber-500 rounded-full mr-2"></span>
+                Generated
+              </span>
+            <% } else if (i.status === 'in_progress') { %>
+              <span class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+                In Progress
+              </span>
+            <% } else { %>
+              <span class="inline-flex items-center px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
+                Completed
+              </span>
+            <% } %>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex space-x-2">
+            <% if (i.status !== 'completed') { %>
+              <button onclick="startAttempt('<%= i._id %>')" 
+                      class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-500 to-blue-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 group/btn">
+                <svg class="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Start
+              </button>
+            <% } else { %>
+              <a href="/dashboard/<%= i._id %>" 
+                 class="inline-flex items-center px-4 py-2 bg-white text-slate-700 font-semibold rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-primary-300 hover:text-primary-600 transform hover:-translate-y-0.5 transition-all duration-200 group/btn">
+                <svg class="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+                Feedback
+              </a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<!-- Empty State -->
+<% if (interviews.length === 0) { %>
+  <div class="text-center py-16">
+    <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+      </svg>
+    </div>
+    <h3 class="text-xl font-semibold text-slate-900 mb-2">No interviews yet</h3>
+    <p class="text-slate-600 mb-6 max-w-md mx-auto">Start your first mock interview to practice and get AI-powered feedback on your responses.</p>
+    <a href="/interview/start" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary-500 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      Create Your First Interview
+    </a>
+  </div>
+<% } %>
+
+<script>
+async function startAttempt(id){
+  try {
+    const res = await fetch('/interview/start-attempt', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ interviewId: id })
+    });
+    
+    if (res.ok) {
+      window.location.href = '/dashboard/' + id;
+    } else {
+      throw new Error('Failed to start attempt');
+    }
+  } catch (error) {
+    // Show a more user-friendly error message
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl shadow-lg z-50';
+    notification.innerHTML = `
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Failed to start interview. Please try again.</span>
+      </div>
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 5000);
+  }
+}
+</script>

@@ -1,0 +1,249 @@
+<!-- views/interview-feedback.ejs -->
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Interview Feedback & Analysis</h1>
+      <p class="text-slate-600">Detailed breakdown of your performance and next steps to improve</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+      <div class="p-8">
+        <!-- Overall Score Card -->
+        <div class="bg-gradient-to-r from-primary-50 to-blue-50 rounded-xl p-6 mb-8 border border-primary-100">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h2 class="text-xl font-semibold text-slate-900 mb-1">Overall Performance Score</h2>
+              <p class="text-slate-600">Based on technical accuracy, clarity, and relevance</p>
+              <p class="mt-2 text-sm text-slate-500">Scored by AI evaluator</p>
+            </div>
+
+            <div class="flex items-center gap-6">
+              <div class="text-center">
+                <div class="text-5xl font-extrabold text-primary-600">
+                  <%= feedback && typeof feedback.overallScore === 'number' ? feedback.overallScore : 'N/A' %>
+                  <span class="text-2xl font-medium text-slate-500">%</span>
+                </div>
+                <div class="text-sm text-slate-500 mt-1">
+                  <%= feedback && typeof feedback.overallScore === 'number'
+                    ? (feedback.overallScore >= 85 ? 'Excellent'
+                        : feedback.overallScore >= 70 ? 'Good'
+                        : feedback.overallScore >= 50 ? 'Average'
+                        : 'Needs Improvement')
+                    : 'No score' %>
+                </div>
+              </div>
+
+              <div class="w-28 h-28">
+                <svg viewBox="0 0 36 36" class="circular-chart" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Overall score">
+                  <path class="circle-bg"
+                    d="M18 2.0845
+                      a 15.9155 15.9155 0 0 1 0 31.831
+                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none"
+                    stroke="#e6e6e6"
+                    stroke-width="3"/>
+                  <path class="circle"
+                    stroke-linecap="round"
+                    d="M18 2.0845
+                      a 15.9155 15.9155 0 0 1 0 31.831
+                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none"
+                    stroke="#0ea5e9"
+                    stroke-width="3"
+                    stroke-dasharray="<%= feedback && typeof feedback.overallScore === 'number' ? Math.max(0, Math.min(100, feedback.overallScore)) : 0 %> 100"/>
+                  <text x="18" y="20.5" class="percentage" text-anchor="middle" fill="#0ea5e9" font-size="6">
+                    <%= feedback && typeof feedback.overallScore === 'number' ? feedback.overallScore + '%' : 'N/A' %>
+                  </text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top summary quick bullets -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div class="p-4 bg-white border border-slate-100 rounded-lg shadow-sm">
+            <div class="text-sm text-slate-500">Questions Reviewed</div>
+            <div class="text-xl font-semibold text-slate-900 mt-1"><%= feedback && feedback.perQuestion ? feedback.perQuestion.length : 0 %></div>
+          </div>
+          <div class="p-4 bg-white border border-slate-100 rounded-lg shadow-sm">
+            <div class="text-sm text-slate-500">Communication</div>
+            <div class="text-xl font-semibold text-slate-900 mt-1">
+              <%= feedback && feedback.communicationScore ? (feedback.communicationScore + '%') : 'Auto-evaluated' %>
+            </div>
+          </div>
+          <div class="p-4 bg-white border border-slate-100 rounded-lg shadow-sm">
+            <div class="text-sm text-slate-500">Technical Depth</div>
+            <div class="text-xl font-semibold text-slate-900 mt-1">
+              <%= feedback && feedback.technicalScore ? (feedback.technicalScore + '%') : 'Auto-evaluated' %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed AI Report -->
+        <% if (feedback && feedback.detailedReport) { %>
+          <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-slate-900 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                AI Analysis Report
+              </h3>
+              <div class="flex items-center gap-2">
+                <span class="text-xs bg-primary-100 text-primary-800 px-2 py-1 rounded-full">Detailed Feedback</span>
+                <button id="copyReportBtn" class="text-xs px-3 py-1 bg-slate-100 rounded-md hover:bg-slate-200">Copy</button>
+              </div>
+            </div>
+            <div class="bg-slate-900 text-slate-100 rounded-xl p-6 border border-slate-700">
+              <div class="prose prose-invert max-w-none">
+                <pre id="detailedReport" class="whitespace-pre-wrap font-sans text-sm leading-relaxed"><%= feedback.detailedReport %></pre>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Per Question Feedback -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-slate-900 flex items-center">
+              <svg class="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              Question-by-Question Analysis
+            </h3>
+            <span class="text-sm text-slate-500"><%= feedback && feedback.perQuestion ? feedback.perQuestion.length : 0 %> questions reviewed</span>
+          </div>
+
+          <div class="space-y-4">
+            <% if (feedback && Array.isArray(feedback.perQuestion) && feedback.perQuestion.length) { %>
+              <% feedback.perQuestion.forEach((p, index) => { %>
+                <div class="bg-white border border-slate-200 rounded-xl p-6 hover:shadow-md transition-all duration-200">
+                  <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <!-- Question and Answer -->
+                    <div class="flex-1">
+                      <div class="flex items-start space-x-3 mb-4">
+                        <div class="flex-shrink-0 w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-sm font-semibold">
+                          <%= index + 1 %>
+                        </div>
+                        <div class="flex-1">
+                          <h4 class="font-semibold text-slate-900 mb-2">Question</h4>
+                          <p class="text-slate-700 bg-slate-50 rounded-lg p-3 text-sm leading-relaxed">
+                            <%= p.question %>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-semibold">
+                          A
+                        </div>
+                        <div class="flex-1">
+                          <h4 class="font-semibold text-slate-900 mb-2">Your Answer</h4>
+                          <p class="text-slate-700 bg-blue-50 rounded-lg p-3 text-sm leading-relaxed whitespace-pre-wrap">
+                            <%= p.answer || 'No answer provided' %>
+                          </p>
+
+                          <% if (p.explanation) { %>
+                            <div class="mt-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-md">
+                              <strong class="text-slate-800">AI Note:</strong>
+                              <span class="block mt-1"><%= p.explanation %></span>
+                            </div>
+                          <% } %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Score -->
+                    <div class="lg:w-40 flex-shrink-0">
+                      <div class="text-center">
+                        <div class="inline-flex flex-col items-center">
+                          <div class="text-3xl font-bold text-primary-600 mb-1">
+                            <%= typeof p.score === 'number' ? p.score : 0 %>
+                          </div>
+                          <div class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
+                            out of 100
+                          </div>
+                        </div>
+                        <div class="mt-3 w-full bg-slate-200 rounded-full h-2">
+                          <div class="bg-gradient-to-r from-primary-500 to-blue-500 h-2 rounded-full transition-all duration-700" 
+                               style="width: <%= Math.max(0, Math.min(100, (typeof p.score === 'number' ? p.score : 0))) %>%"></div>
+                        </div>
+
+                        <!-- quick tag -->
+                        <div class="mt-3">
+                          <% const tag = (typeof p.score === 'number' && p.score >= 85) ? 'Strong' : (p.score >= 70 ? 'Good' : (p.score >= 50 ? 'Average' : 'Weak')); %>
+                          <span class="text-xs inline-flex items-center px-2 py-1 rounded-full
+                            <%= tag === 'Strong' ? 'bg-green-100 text-green-800' : tag === 'Good' ? 'bg-primary-100 text-primary-800' 
+                              : tag === 'Average' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800' %>">
+                            <%= tag %>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="text-center py-8 text-slate-500">
+                <svg class="w-12 h-12 mx-auto mb-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p>No detailed feedback available for this interview.</p>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center pt-6 border-t border-slate-200">
+          <div class="text-sm text-slate-600">
+            Ready to practice again or download your report?
+          </div>
+          <div class="flex space-x-3">
+            <a href="/interview/start" class="flex items-center px-6 py-3 bg-gradient-to-r from-primary-500 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+              Practice Another Interview
+            </a>
+            <a href="/dashboard" class="flex items-center px-6 py-3 bg-white text-slate-700 font-semibold rounded-xl border border-slate-300 hover:bg-slate-50 transition-all duration-200">
+              Back to Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.circular-chart {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  max-height: 100px;
+}
+.circle {
+  transition: stroke-dasharray 1s ease-out;
+}
+.percentage { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const copyBtn = document.getElementById('copyReportBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        const text = document.getElementById('detailedReport')?.innerText || '';
+        try {
+          await navigator.clipboard.writeText(text);
+          copyBtn.innerText = 'Copied';
+          setTimeout(() => copyBtn.innerText = 'Copy', 1800);
+        } catch (e) {
+          copyBtn.innerText = 'Copy Failed';
+          setTimeout(() => copyBtn.innerText = 'Copy', 1800);
+        }
+      });
+    }
+  });
+</script>
