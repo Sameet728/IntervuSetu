@@ -1,135 +1,307 @@
-<h2 class="text-3xl font-bold text-slate-900 mb-8">Your Interview Sessions</h2>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-  <% interviews.forEach(i => { %>
-    <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden group hover:-translate-y-1">
-      <!-- Header with gradient accent -->
-      <div class="bg-gradient-to-r from-primary-50 to-blue-50 px-6 py-4 border-b border-slate-100">
-        <div class="flex items-center justify-between">
-          <div class="text-sm font-medium text-primary-600">
-            <%= new Date(i.createdAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) %>
-          </div>
-          <div class="text-xs text-slate-500">
-            <%= new Date(i.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %>
-          </div>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50">
+  
+  <!-- Header Section with Analytics -->
+  <div class="bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      
+      <!-- Title & Create Button -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-4xl font-bold text-slate-900 tracking-tight mb-2">
+            Interview Sessions
+          </h1>
+          <p class="text-slate-600">Track your progress and improve your interview skills</p>
         </div>
+        
+        <a href="/interview/start" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          New Interview
+        </a>
       </div>
 
-      <!-- Content -->
-      <div class="p-6">
-        <!-- Role and Difficulty -->
-        <div class="mb-4">
-          <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-primary-600 transition-colors duration-200">
-            <%= i.role %>
-          </h3>
-          <div class="flex items-center space-x-2">
-            <span class="text-slate-500 text-sm">Difficulty:</span>
-            <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium capitalize">
-              <%= i.difficulty %>
-            </span>
-          </div>
-        </div>
-
-        <!-- Status and Actions -->
-        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-          <!-- Status Badge -->
-          <div>
-            <% if (i.status === 'generated') { %>
-              <span class="inline-flex items-center px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-sm font-medium border border-amber-200">
-                <span class="w-2 h-2 bg-amber-500 rounded-full mr-2"></span>
-                Generated
-              </span>
-            <% } else if (i.status === 'in_progress') { %>
-              <span class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200">
-                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
-                In Progress
-              </span>
-            <% } else { %>
-              <span class="inline-flex items-center px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200">
-                <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
-                Completed
-              </span>
-            <% } %>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="flex space-x-2">
-            <% if (i.status !== 'completed') { %>
-              <button onclick="startAttempt('<%= i._id %>')" 
-                      class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-500 to-blue-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 group/btn">
-                <svg class="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      <!-- Analytics Cards -->
+      <% if (interviews.length > 0) { %>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          
+          <!-- Total Sessions -->
+          <div class="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl p-6 border border-blue-200/50">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                Start
-              </button>
-            <% } else { %>
-              <a href="/dashboard/<%= i._id %>" 
-                 class="inline-flex items-center px-4 py-2 bg-white text-slate-700 font-semibold rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-primary-300 hover:text-primary-600 transform hover:-translate-y-0.5 transition-all duration-200 group/btn">
-                <svg class="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-                Feedback
-              </a>
-            <% } %>
+              </div>
+              <span class="text-3xl font-bold text-blue-900"><%= interviews.length %></span>
+            </div>
+            <p class="text-sm font-medium text-blue-700">Total Sessions</p>
           </div>
-        </div>
-      </div>
-    </div>
-  <% }) %>
-</div>
 
-<!-- Empty State -->
-<% if (interviews.length === 0) { %>
-  <div class="text-center py-16">
-    <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
-      <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
-      </svg>
+          <!-- Completed -->
+          <div class="bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-2xl p-6 border border-emerald-200/50">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <span class="text-3xl font-bold text-emerald-900"><%= interviews.filter(i => i.status === 'completed').length %></span>
+            </div>
+            <p class="text-sm font-medium text-emerald-700">Completed</p>
+          </div>
+
+          <!-- In Progress -->
+          <div class="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-2xl p-6 border border-amber-200/50">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <span class="text-3xl font-bold text-amber-900"><%= interviews.filter(i => i.status === 'in_progress').length %></span>
+            </div>
+            <p class="text-sm font-medium text-amber-700">In Progress</p>
+          </div>
+
+          <!-- Success Rate -->
+          <div class="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-2xl p-6 border border-purple-200/50">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+              </div>
+              <span class="text-3xl font-bold text-purple-900">
+                <%= interviews.length > 0 ? Math.round((interviews.filter(i => i.status === 'completed').length / interviews.length) * 100) : 0 %>%
+              </span>
+            </div>
+            <p class="text-sm font-medium text-purple-700">Completion Rate</p>
+          </div>
+
+        </div>
+      <% } %>
+
     </div>
-    <h3 class="text-xl font-semibold text-slate-900 mb-2">No interviews yet</h3>
-    <p class="text-slate-600 mb-6 max-w-md mx-auto">Start your first mock interview to practice and get AI-powered feedback on your responses.</p>
-    <a href="/interview/start" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary-500 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-      </svg>
-      Create Your First Interview
-    </a>
   </div>
-<% } %>
 
-<script>
-async function startAttempt(id){
-  try {
-    const res = await fetch('/interview/start-attempt', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ interviewId: id })
-    });
-    
-    if (res.ok) {
-      window.location.href = '/dashboard/' + id;
-    } else {
-      throw new Error('Failed to start attempt');
-    }
-  } catch (error) {
-    // Show a more user-friendly error message
-    const notification = document.createElement('div');
-    notification.className = 'fixed top-4 right-4 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl shadow-lg z-50';
-    notification.innerHTML = `
-      <div class="flex items-center">
-        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <span>Failed to start interview. Please try again.</span>
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-6 py-8">
+
+    <% if (interviews.length > 0) { %>
+      
+      <!-- Filter & Sort Bar -->
+      <div class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="flex flex-wrap items-center gap-4">
+          
+          <!-- Search -->
+          <div class="flex-1 min-w-[280px]">
+            <div class="relative">
+              <input type="text" placeholder="Search interviews..." 
+                     class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+              <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Status Filter -->
+          <select class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-700">
+            <option value="">All Status</option>
+            <option value="generated">Not Started</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+
+          <!-- Type Filter -->
+          <select class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-700">
+            <option value="">All Types</option>
+            <option value="Technical">Technical</option>
+            <option value="Behavioral">Behavioral</option>
+            <option value="System Design">System Design</option>
+          </select>
+
+          <!-- Sort -->
+          <select class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-700">
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="title">Title A-Z</option>
+          </select>
+
+        </div>
       </div>
-    `;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.remove();
-    }, 5000);
-  }
-}
-</script>
+
+      <!-- Interview Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        
+        <% interviews.forEach(i => { %>
+          <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200 overflow-hidden group">
+            
+            <!-- Status Indicator Bar -->
+            <div class="h-1.5 bg-gradient-to-r <%= i.status === 'completed' ? 'from-emerald-400 to-emerald-500' : i.status === 'in_progress' ? 'from-blue-400 to-blue-500' : 'from-slate-300 to-slate-400' %>"></div>
+
+            <!-- Card Content -->
+            <div class="p-6">
+              
+              <!-- Header with Date -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2 text-sm text-slate-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  <span class="font-medium">
+                    <%= new Date(i.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year:'numeric' }) %>
+                  </span>
+                </div>
+                
+                <!-- Status Badge -->
+                <% if (i.status === 'generated') { %>
+                  <span class="flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-semibold">
+                    <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span>
+                    Not Started
+                  </span>
+                <% } else if (i.status === 'in_progress') { %>
+                  <span class="flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+                    In Progress
+                  </span>
+                <% } else { %>
+                  <span class="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                    Completed
+                  </span>
+                <% } %>
+              </div>
+
+              <!-- Job Title -->
+              <h3 class="text-xl font-bold text-slate-900 mb-4 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                <%= i.title || i.role %>
+              </h3>
+
+              <!-- Metadata Tags -->
+              <div class="flex flex-wrap gap-2 mb-5">
+                <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-semibold border border-blue-100">
+                  <%= i.type %>
+                </span>
+                <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-semibold border border-emerald-100">
+                  <%= i.experienceLevel %>
+                </span>
+                <span class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg text-xs font-semibold border border-purple-100">
+                  <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <%= i.duration %> min
+                </span>
+              </div>
+
+              <!-- Skills -->
+              <% if(i.skills && i.skills.length > 0) { %>
+                <div class="mb-5">
+                  <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Skills</p>
+                  <div class="flex flex-wrap gap-2">
+                    <% i.skills.slice(0, 3).forEach(skill => { %>
+                      <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">
+                        <%= skill %>
+                      </span>
+                    <% }) %>
+                    <% if(i.skills.length > 3) { %>
+                      <span class="px-2.5 py-1 bg-slate-100 text-slate-500 rounded-md text-xs font-medium">
+                        +<%= i.skills.length - 3 %> more
+                      </span>
+                    <% } %>
+                  </div>
+                </div>
+              <% } %>
+
+              <!-- Action Button -->
+              <div class="pt-5 border-t border-slate-100">
+                <% if (i.status !== 'completed') { %>
+                  <button onclick="startAttempt('<%= i._id %>')"
+                          class="w-full inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <%= i.status === 'in_progress' ? 'Continue Interview' : 'Start Interview' %>
+                  </button>
+                <% } else { %>
+                  <a href="/dashboard/<%= i._id %>"
+                     class="w-full inline-flex items-center justify-center px-5 py-3 bg-white text-slate-700 font-semibold rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:text-blue-600 hover:shadow-lg transition-all duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    View Performance
+                  </a>
+                <% } %>
+              </div>
+
+            </div>
+          </div>
+        <% }) %>
+
+      </div>
+
+    <% } else { %>
+      
+      <!-- Empty State -->
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-16 text-center">
+        
+        <!-- Icon -->
+        <div class="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+          <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+          </svg>
+        </div>
+
+        <h3 class="text-3xl font-bold text-slate-900 mb-3">Ready to ace your next interview?</h3>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto mb-8">
+          Start your first AI-powered mock interview session and receive personalized feedback to improve your skills.
+        </p>
+
+        <!-- Features List -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-10">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+            </div>
+            <h4 class="font-semibold text-slate-900 mb-1">AI-Powered Questions</h4>
+            <p class="text-sm text-slate-600">Dynamic questions tailored to your role</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+            <h4 class="font-semibold text-slate-900 mb-1">Detailed Feedback</h4>
+            <p class="text-sm text-slate-600">Actionable insights on your performance</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+            </div>
+            <h4 class="font-semibold text-slate-900 mb-1">Track Progress</h4>
+            <p class="text-sm text-slate-600">Monitor improvement over time</p>
+          </div>
+        </div>
+
+        <a href="/interview/start"
+           class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 text-lg">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          Create Your First Interview
+        </a>
+      </div>
+
+    <% } %>
+
+  </div>
+
+</div>
