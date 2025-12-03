@@ -303,5 +303,62 @@
     <% } %>
 
   </div>
+<script>
+async function startAttempt(id) {
+  try {
+    const res = await fetch('/interview/start-attempt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ interviewId: id })
+    });
+
+    if (!res.ok) throw new Error("Failed");
+
+    // Success redirect
+    window.location.href = `/dashboard/${id}`;
+
+  } catch (err) {
+    showToast("Failed to start interview. Please try again.", "error");
+  }
+}
+
+// Toast notification function
+function showToast(message, type = "success") {
+  const el = document.createElement("div");
+
+  el.className = `
+    fixed top-4 right-4 px-6 py-4 rounded-xl shadow-xl z-[9999]
+    flex items-center space-x-3 animate-slideIn
+    ${type === "success" 
+      ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+      : "bg-red-50 text-red-700 border border-red-200"}
+  `;
+
+  el.innerHTML = `
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="${type === 'success'
+          ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+          : 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'}" 
+      ></path>
+    </svg>
+    <span class="font-medium">${message}</span>
+  `;
+
+  document.body.appendChild(el);
+
+  setTimeout(() => el.remove(), 3500);
+}
+</script>
+
+<style>
+@keyframes slideIn {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.animate-slideIn {
+  animation: slideIn 0.4s ease-out;
+}
+</style>
 
 </div>
